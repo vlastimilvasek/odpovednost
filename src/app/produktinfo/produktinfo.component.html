@@ -1,0 +1,74 @@
+		<div *ngIf="data.pojisteni == 'ZAMODP'" class="card">
+			<div class="row align-items-center card-body">
+				<div class="{{ layout.grid.info1 }}">
+					<img src="{{ LOGA[r.pojistovna] }}" class="mx-auto d-block" style="max-height:50px;" alt="{{ r.pojistovna }}" />
+				</div>
+				<div class="{{ layout.grid.info2 }}">
+					<h5 class="card-title">{{ r.produkt }}</h5>
+					<div class="card-text">
+						<div class="clearfix">{{ r.param_obj.pc.popis }}<span style="float:right" [innerHTML]="r.param_obj.pc.hodnota | menaFormat"></span></div>
+                        <div class="clearfix">{{ r.param_obj.spol.popis }}<span style="float:right" [innerHTML]="r.param_obj.spol.hodnota | spolFormat"></span></div>
+                        <div class="clearfix">{{ r.param_obj.uzpl.popis }}<span style="float:right" [innerHTML]="r.param_obj.uzpl.hodnota"></span></div>
+						<div class="clearfix">{{ r.param_obj.r_voz.popis }}<span style="float:right" [innerHTML]="r.param_obj.r_voz.hodnota | menaFormatInfo"></span></div>
+                        <div class="clearfix">{{ r.param_obj.r_sou.popis }}<span style="float:right" [innerHTML]="r.param_obj.r_sou.hodnota | menaFormatInfo"></span></div>
+                        <div class="clearfix">{{ r.param_obj.r_nakl.popis }}<span style="float:right" [innerHTML]="r.param_obj.r_nakl.hodnota | menaFormatInfo"></span></div>
+                        <div class="clearfix">{{ r.param_obj.r_str.popis }}<span style="float:right" [innerHTML]="r.param_obj.r_str.hodnota | menaFormatInfo"></span></div>
+                    </div>
+                    <h5 *ngIf="r.pplatby.length" class="vagl mt-4">{{ 'SROVNANI.PLATBY' | translate }}</h5>                    
+					<div *ngIf="r.pplatby.length">
+						<span *ngFor="let pl of r.pplatby" class="" >
+							<button *ngIf="pl.value" class="btn btn-sm mt-1 mr-1" type="button"
+								[class.btn-primary]="data.platba === pl.key" [class.btn-outline-primary]="data.platba !== pl.key"
+								(click)="data.platba = pl.key">
+								{{ pl.key }} x <strong><span [outerHTML]="pl.value | telefonFormat"></span>&nbsp;{{ 'FORM.KC' | translate }}</strong>
+							</button>
+						</span>
+                    </div>
+                    <div *ngIf="show_doc === true">
+                        <h5 *ngIf="r.dokumenty.length" class="vagl mt-4">{{ 'SROVNANI.DOKUMENTY' | translate }}</h5>
+                        <ul *ngIf="r.dokumenty.length" class="fa-ul">
+                            <li *ngFor="let dok of r.dokumenty">
+                                <a class="" href="{{ dok.url }}" target="_pdf_dok"><span class="fa-li" ><i class="text-danger far fa-file-pdf"></i></span> {{ dok.nazev }}</a>
+                            </li>
+                        </ul>
+                    </div>					
+				</div>
+			</div>
+        </div>
+
+		<div *ngIf="data.pojisteni == 'OBODP'" class="card">
+			<div class="row align-items-center card-body">
+				<div class="{{ layout.grid.info1 }}">
+					<img src="{{ LOGA[r.pojistovna] }}" class="mx-auto d-block" style="max-height:50px;" alt="{{ r.pojistovna }}" />
+				</div>
+				<div class="{{ layout.grid.info2 }}">
+					<h5 class="card-title vag">{{ r.produkt }}</h5>
+					<div class="card-text">
+						<div class="clearfix">{{ r.param_obj.zdr.popis }}<span style="float:right" [innerHTML]="r.param_obj.zdr.hodnota | menaFormat"></span></div>
+                        <div class="clearfix">{{ r.param_obj.maj.popis }}<span style="float:right" [innerHTML]="r.param_obj.maj.hodnota | menaFormat"></span></div>
+						<div class="clearfix">{{ r.param_obj.fu.popis }}<span style="float:right" [innerHTML]="r.param_obj.fu.hodnota | menaFormat"></span></div>
+                        <div class="clearfix">{{ r.param_obj.nmu.popis }}<span style="float:right" [innerHTML]="r.param_obj.nmu.hodnota | menaFormat"></span></div>
+						<div class="clearfix">{{ r.param_obj.spol.popis }}<span style="float:right" [innerHTML]="r.param_obj.spol.hodnota | spolFormat"></span></div>
+						<div class="clearfix">{{ r.param_obj.uzpl.popis }}:<span class="ml-4" [innerHTML]="r.param_obj.uzpl.hodnota"></span></div>                                                
+                    </div>
+                    <h5 *ngIf="r.pplatby.length" class="vagl mt-4">{{ 'SROVNANI.PLATBY' | translate }}</h5>
+					<div *ngIf="r.pplatby.length" class="">
+						<span *ngFor="let pl of r.pplatby" class="" >
+							<button *ngIf="pl.value" class="btn btn-sm mt-1 mr-1" type="button"
+								[class.btn-primary]="data.platba === pl.key" [class.btn-outline-primary]="data.platba !== pl.key"
+								(click)="data.platba = pl.key">
+								{{ pl.key }} x <strong><span [outerHTML]="pl.value | telefonFormat"></span>&nbsp;{{ 'FORM.KC' | translate }}</strong>
+							</button>
+						</span>
+                    </div>
+                    <div *ngIf="show_doc === true">
+                        <h5 *ngIf="r.dokumenty.length" class="vagl mt-4">{{ 'SROVNANI.DOKUMENTY' | translate }}</h5>
+                        <ul *ngIf="r.dokumenty.length" class="fa-ul">
+                            <li *ngFor="let dok of r.dokumenty">
+                                <a class="" href="{{ dok.url }}" target="_pdf_dok"><span class="fa-li" ><i class="text-danger far fa-file-pdf"></i></span> {{ dok.nazev }}</a>
+                            </li>
+                        </ul>
+                    </div>                    					
+				</div>
+			</div>
+		</div>        

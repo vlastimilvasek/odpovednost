@@ -1,0 +1,228 @@
+<fieldset #zadani id="zadani" ngModelGroup="zadani">
+
+	<h3 class="head-title" [hidden]="data.pojisteni === 'zam1' || data.pojisteni === 'obc1'">{{ 'ZADANI.POJISTENI.TITLE' | translate }}</h3>
+	
+	<div class="form-group text-center mb-4">
+		<div class="btn-group btn-group-toggle" data-toggle="buttons">
+		  <label class="btn btn-outline-primary" (click)="vyberZam();" [class.active]="data.pojisteni === 'ZAMODP'">
+		    <input name="pojisteni" [(ngModel)]="data.pojisteni" #Pojisteni="ngModel" value="ZAMODP" type="radio" required />
+		    <i class="icon shape-o-odpovednost fa-4x"></i><br />
+		    {{ 'POJISTKA.POJISTENI.ZAMODP' | translate }}
+		  </label>
+		  <label class="btn btn-outline-primary" (click)="vyberObc();" [class.active]="data.pojisteni === 'OBODP'">
+		    <input name="pojisteni" [(ngModel)]="data.pojisteni" #Pojisteni="ngModel" value="OBODP" type="radio" required />
+		    <i class="icon shape-o-obcanska fa-4x"></i><br />
+		    {{ 'POJISTKA.POJISTENI.OBODP' | translate }}
+		  </label>
+		</div>
+		<br /><small [hidden]="Pojisteni.valid || (Pojisteni.pristine && !submitted)" class="text-danger text-center">
+			{{ 'FORM.VALIDATION.RADIOREQUIRED' | translate }}
+		</small>		
+	</div>
+
+	<div id="start"></div>
+	<div *ngIf="data.pojisteni == 'ZAMODP';then zam_tmpl"></div>
+	<div *ngIf="data.pojisteni == 'OBODP';then obc_tmpl"></div>
+
+	<ng-template #zam_tmpl>
+
+	<div class="row mb-4 pt-4">
+		<div class="{{ layout.grid.column }}">
+	
+			<div class="form-group row">
+				<label class="{{ layout.grid.label }} col-form-label"
+					placement="top"
+					triggers="mouseenter:mouseleave"	
+					popover="{{ 'POJISTKA.PC.HINT' | translate }}">
+					{{ 'POJISTKA.PC.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input }}">
+					<div class="input-group">
+						<input id="pc" name="pc" class="form-control" type="text" placeholder="{{ 'POJISTKA.PC.PLACEHOLDER' | translate }}"
+							[(ngModel)]="data.pc" #pc="ngModel" telefonFormat required />
+						<div class="input-group-append">
+							<span class="input-group-text">{{ 'FORM.KC' | translate }}</span>
+						</div>
+					</div>					
+				</div>
+				<small [hidden]="pc.valid || (pc.pristine && !submitted)" class="text-danger offset-sm-5 {{ layout.grid.input }}">
+					{{ 'FORM.VALIDATION.REQUIRED' | translate }}
+				</small>
+			</div>
+			<div class="form-group row">
+				<label class="{{ layout.grid.label }}  col-form-label"
+					placement="right"
+					triggers="mouseenter:mouseleave"
+					popoverTitle="{{ 'POJISTKA.VEK.LABEL' | translate }}"		
+					popover="{{ 'POJISTKA.VEK.HINT' | translate }}">
+					{{ 'POJISTKA.VEK.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input }}">
+					<input name="vek" class="form-control" type="text" placeholder="{{ 'POJISTKA.VEK.PLACEHOLDER' | translate }}"
+						[(ngModel)]="data.vek" #vek="ngModel" telefonFormat required />
+				</div>
+				<small [hidden]="vek.valid || (vek.pristine && !submitted)" class="text-danger offset-sm-5 {{ layout.grid.input }}">
+					{{ 'FORM.VALIDATION.REQUIRED' | translate }}
+				</small>
+			</div>				
+			<div class="form-group row">
+				<label class="{{ layout.grid.label }}  col-form-label"
+					placement="right"
+					triggers="mouseenter:mouseleave"
+					popoverTitle="{{ 'POJISTKA.POVOLANI.LABEL' | translate }}"		
+					popover="{{ 'POJISTKA.POVOLANI.HINT' | translate }}">
+					{{ 'POJISTKA.POVOLANI.LABEL' | translate }}
+				</label>		
+				<div class="{{ layout.grid.input }}"> 
+					<ngx-select
+						name = "povolani" class="" #povolani="ngModel"
+						placeholder="{{ 'FORM.SELECT.DEFAULT' | translate }}"
+					    [items]="lists.povolani"
+					    [allowClear]="false"
+					    [(ngModel)]="data.povolani"
+					    (ngModelChange)="profeseList(true)"
+					    required>
+					</ngx-select>			
+				</div>
+				<small [hidden]="povolani.valid || (povolani.pristine && !submitted)" class="text-danger offset-sm-5 {{ layout.grid.input }}">
+					{{ 'FORM.VALIDATION.REQUIRED' | translate }}
+				</small>		
+			</div>
+			<div class="form-group row" [hidden]="data.povolani === ''">
+				<label class="{{ layout.grid.label }}  col-form-label"
+					placement="right"
+					triggers="mouseenter:mouseleave"
+					popoverTitle="{{ 'POJISTKA.PROFESE.LABEL' | translate }}"		
+					popover="{{ 'POJISTKA.PROFESE.HINT' | translate }}">
+					{{ 'POJISTKA.PROFESE.LABEL' | translate }}
+				</label>		
+				<div class="{{ layout.grid.input }}"> 
+					<ngx-select
+						name = "profese" class="" #profese="ngModel"
+						placeholder="{{ 'FORM.SELECT.DEFAULT' | translate }}"
+						noResultsFound="{{ 'FORM.SELECT.NOTFOUND' | translate }}"
+					    [items]="lists.profese"
+					    [allowClear]="false"
+					    [(ngModel)]="data.profese" 
+					    required>
+					</ngx-select>			
+				</div>
+				<small [hidden]="profese.valid || (profese.pristine && !submitted)" class="text-danger offset-sm-5 {{ layout.grid.input }}">
+					{{ 'FORM.VALIDATION.REQUIRED' | translate }}
+				</small>		
+			</div>
+	
+		</div>
+		<div class="{{ layout.grid.column }}">
+	
+			<div class="form-group row">
+				<label class="{{ layout.grid.label2 }} col-form-label"
+					placement="top"
+					triggers="mouseenter:mouseleave"		
+					popover="{{ 'POJISTKA.RIZENI_VOZ.HINT' | translate }}">
+					{{ 'POJISTKA.RIZENI_VOZ.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input2 }}">   		
+					<div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_voz === 1">
+					    <input name="rizeni_voz" [(ngModel)]="data.rizeni_voz" [value]="1" type="radio" required />
+					    {{ 'FORM.ANO' | translate }}
+					  </label>
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_voz === 0">
+					    <input name="rizeni_voz" [(ngModel)]="data.rizeni_voz" [value]="0" type="radio" />
+					    {{ 'FORM.NE' | translate }}
+					  </label>
+					</div>
+				</div>   		
+			</div>
+			<div class="form-group row" *ngIf="data.rizeni_voz === 1">
+				<label class="{{ layout.grid.label2 }} col-form-label"
+					placement="top"
+					triggers="mouseenter:mouseleave"	
+					popover="{{ 'POJISTKA.RIZENI_SOU.HINT' | translate }}">
+					{{ 'POJISTKA.RIZENI_SOU.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input2 }}">   		
+					<div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_sou === 1">
+					    <input name="rizeni_sou" [(ngModel)]="data.rizeni_sou" [value]="1" type="radio" required />
+					    {{ 'FORM.ANO' | translate }}
+					  </label>
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_sou === 0">
+					    <input name="rizeni_sou" [(ngModel)]="data.rizeni_sou" [value]="0" type="radio" />
+					    {{ 'FORM.NE' | translate }}
+					  </label>
+					</div>
+				</div>   		
+			</div>			
+			<div class="form-group row">
+				<label class="{{ layout.grid.label2 }} col-form-label"
+					placement="top"
+					triggers="mouseenter:mouseleave"	
+					popover="{{ 'POJISTKA.RIZENI_NAKL.HINT' | translate }}">
+					{{ 'POJISTKA.RIZENI_NAKL.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input2 }}">   		
+					<div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_nakl === 1">
+					    <input name="rizeni_nakl" [(ngModel)]="data.rizeni_nakl" [value]="1" type="radio" required />
+					    {{ 'FORM.ANO' | translate }}
+					  </label>
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_nakl === 0">
+					    <input name="rizeni_nakl" [(ngModel)]="data.rizeni_nakl" [value]="0" type="radio" />
+					    {{ 'FORM.NE' | translate }}
+					  </label>
+					</div>
+				</div>   		
+			</div>
+			<div class="form-group row">
+				<label class="{{ layout.grid.label2 }} col-form-label"
+					placement="top"
+					triggers="mouseenter:mouseleave"	
+					popover="{{ 'POJISTKA.RIZENI_STR.HINT' | translate }}">
+					{{ 'POJISTKA.RIZENI_STR.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input2 }}">   		
+					<div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_str === 1">
+					    <input name="rizeni_str" [(ngModel)]="data.rizeni_str" [value]="1" type="radio" required />
+					    {{ 'FORM.ANO' | translate }}
+					  </label>
+					  <label class="btn btn-outline-primary" [class.active]="data.rizeni_str === 0">
+					    <input name="rizeni_str" [(ngModel)]="data.rizeni_str" [value]="0" type="radio" />
+					    {{ 'FORM.NE' | translate }}
+					  </label>
+					</div>
+				</div>   		
+			</div>
+			<div class="form-group row">
+				<label class="{{ layout.grid.label2 }} col-form-label"
+					placement="top"
+					triggers="mouseenter:mouseleave"	
+					popover="{{ 'POJISTKA.UZ_PLATNOST.HINT' | translate }}">
+					{{ 'POJISTKA.UZ_PLATNOST.LABEL' | translate }}
+				</label>
+				<div class="{{ layout.grid.input2 }}">   		
+					<div class="btn-group btn-group-toggle btn-group-sm" data-toggle="buttons">
+					  <label class="btn btn-outline-primary" [class.active]="data.uz_platnost === 1">
+					    <input name="uz_platnost" [(ngModel)]="data.uz_platnost" [value]="1" type="radio" required />
+					    {{ 'POJISTKA.UZ_PLATNOST.EVROPA' | translate }}
+					  </label>
+					  <label class="btn btn-outline-primary" [class.active]="data.uz_platnost === 0">
+					    <input name="uz_platnost" [(ngModel)]="data.uz_platnost" [value]="0" type="radio" />
+					    {{ 'POJISTKA.UZ_PLATNOST.CR' | translate }}
+					  </label>
+					</div>
+				</div>   		
+			</div>
+									
+		</div>
+	</div>
+	<input name="limit_zsv" [(ngModel)]="data.limit_zsv" value="0" type="hidden" />
+	</ng-template>  
+
+	<ng-template #obc_tmpl>
+
+	</ng-template>
+
+</fieldset>

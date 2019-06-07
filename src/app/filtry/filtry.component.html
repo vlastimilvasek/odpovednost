@@ -1,0 +1,73 @@
+<fieldset #pf id="pf" ngModelGroup="pf">
+
+  <div class="row">
+    <div class="col-12 col-md-6">
+
+      <!--  Filtr partneři -->
+
+      <h5 class="card-title">{{ 'FILTRY.PARTNERS' | translate }}
+        <small>
+          <a role="button" class="btn btn-link" (click)="partneriVse($event)">{{ 'FILTRY.SELECT_ALL' | translate }}</a>
+        </small>
+      </h5>
+      <div class="ml-3">
+        <div *ngFor="let p of filters.partneri" class="form-group1">
+          <div class="custom-control custom-checkbox col align-items-center">
+            <input class="custom-control-input" name="{{ p }}" id="id_{{ p }}" [(ngModel)]="filters.partnobj[p]" value="1" type="checkbox"
+            />
+            <label class="custom-control-label" for="id_{{ p }}">
+              <img src="{{ LOGA[p] }}" style="max-height:30px;" alt="{{ p }}" />
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-12 col-md-6">
+
+      <!--  Filtr limity OBODP -->
+      <div *ngIf="data.pojisteni == 'OBODP';">
+        <div style="max-width: 20rem;">
+          <h5 class="card-title">{{ 'FILTRY.MIN_LIMITS' | translate }}</h5>
+          {{ 'FILTRY.ZDR' | translate }}
+          <span class="pull-right">{{ min_zdr.value | telefonFormat }} {{ 'FORM.KC' | translate }}</span>
+          <div>
+            <input #min_zdr name="min_zdr" type="range" [(ngModel)]="filters.min_zdr" min="0" max="10000000" step="1000000">
+          </div>
+          {{ 'FILTRY.MAJ' | translate }}
+          <span class="pull-right">{{ min_maj.value | telefonFormat }} {{ 'FORM.KC' | translate }}</span>
+          <div>
+            <input #min_maj name="min_maj" type="range" [(ngModel)]="filters.min_maj" min="0" max="10000000" step="1000000">
+          </div>
+        </div>
+        <h5 class="card-title">{{ 'FILTRY.SPOLUUC' | translate }}</h5>
+        <div class="custom-control custom-checkbox mb-2">
+          <input class="custom-control-input" id="spoluuc" name="spoluuc" [(ngModel)]="filters.spoluuc" value="1" type="checkbox" />
+          <label class="custom-control-label" for="spoluuc">
+            {{ 'FILTRY.SPOL_NULL' | translate }}
+          </label>
+        </div>
+      </div>
+      <!--  Filtr úroveň spoluúčasti ZAM -->
+      <div *ngIf="data.pojisteni == 'ZAMODP';" style="max-width: 20rem;">
+        {{ 'FILTRY.SPOL_MAX' | translate }}
+        <span class="pull-right">{{ ('TEXTY.SLEVEL.' + max_spol.value) | translate }}</span>
+        <div>
+          <input #max_spol name="max_spol" type="range" [(ngModel)]="filters.max_spol" min="1" max="3" step="1">
+        </div>
+      </div>
+      <!--  Filtr platba -->
+      <h5 class="card-title">{{ 'POJISTKA.PLATBA.LABEL' | translate }}</h5>
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label *ngFor="let platba of filters.platby" class="btn btn-sm btn-outline-primary" [class.active]="data.platba === platba">
+          <input name="platba" [(ngModel)]="data.platba" [value]="platba" type="radio" />
+          {{ ('TEXTY.PLATBA.' + platba) | translate }}
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+</fieldset>
+
+
