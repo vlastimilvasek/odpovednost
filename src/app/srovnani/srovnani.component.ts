@@ -40,6 +40,16 @@ export class SrovnaniComponent implements OnInit {
 
     constructor() { }
 
+    GAEvent(cat: string, label: string, action: string, val: number): void {
+        console.log('GAEvent', label);
+        (<any>window).ga('send', 'event', {
+            eventCategory: cat,
+            eventLabel: label,
+            eventAction: action,
+            eventValue: val
+        });
+    }
+
     ngOnInit() {
         this.platby = [1, 2, 4];
         /*

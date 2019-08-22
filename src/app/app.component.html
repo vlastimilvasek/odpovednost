@@ -30,7 +30,7 @@
 		<div class="visible-xs text-center alert alert-danger" role="alert">Rozlišení XS</div>
 	</div>
 
-  <tabset #stepTabs type="pills" [justified]="true">
+  <tabset id="stepTabs" #stepTabs type="pills" [justified]="true">
     <tab>
     	<ng-template tabHeading>
 			<span class="nav-desc">{{ 'FORM.TABS.ZADANI' | translate }}</span>
@@ -113,7 +113,7 @@
 					</div>
 				</div>
 				<form #filtry="ngForm">
-				<app-filtry *ngIf="offers.length" [data]="data" [(filters)]="filters"></app-filtry>
+				<app-filtry [(data)]="data" [(filters)]="filters"></app-filtry>
 				</form>
 			</div>
 		</div>
@@ -291,7 +291,7 @@
         </button>
       </div>
       <div class="modal-body">
-         <tabset #partneriTabs type="pills">
+         <tabset #partneriTabs> <!-- type="pills" -->
 			<tab heading="Data">
 				<pre>{{ data | json }}</pre>
 			</tab>
@@ -305,14 +305,35 @@
                 <pre>Rekapitulace platná?: {{ r.valid | json }}</pre>
 				<pre>#r: {{ r.value | json }}</pre>	
             </tab> 			       
-         	<tab heading="Produkty - offers">
+         	<tab heading="Produkty">
 		      	<tabset #partneriTabs type="tabs" [justified]="true">
-				    <tab *ngFor="let r of offers" heading="{{ r.kalk + ' ' + r.produkt }}">
+				    <tab *ngFor="let r of nvoffers" heading="{{ r.produkt }}">
 						<pre>{{r | json}}</pre>
 				    </tab>
 				</tabset>
-			</tab>
-			<tab heading="Vybraný produkt">
+            </tab>
+         	<tab *ngIf="!this.kalk_aktivni && offers.length" heading="Výpočty">
+                <tabset [vertical]="false" type="pills">
+                    <tab *ngFor="let r of offers" heading="{{ r.produkt }}">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Obchodní sleva</h4>
+                                <p>OBODP: {{ r?.odp_sleva }}</p>
+                                <p>ZAMODP: {{ r?.zam_sleva }}</p>
+                                <h4>Připojištění</h4>
+                                <p>{{ r?.pripojisteni | json }}</p>
+                            </div>
+                            <div class="col-6">
+                                <h4>Výpočet plateb</h4>
+                                <p>Ročně: {{ r?.vypocet[1] }}</p>
+                                <p>Pololetně: {{ r?.vypocet[2] }}</p>
+                                <p>Čtvrtletně: {{ r?.vypocet[4] }}</p>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+			</tab>            
+			<tab heading="Výběr">
 				<pre>{{ vprodukt | json }}</pre>
 			</tab>
 			<tab heading="Filtry">

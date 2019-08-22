@@ -32,6 +32,7 @@ export class ZadaniComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.filters = {};
         this.offers = [];
+        this.data.produkt = null;
         setTimeout(() =>  {
             this.data.pojisteni = 'ZAMODP';
         }, 10);
@@ -51,6 +52,7 @@ export class ZadaniComponent implements OnInit, OnChanges {
         this.submitted = false;
         this.filters = {};
         this.offers = [];
+        this.data.produkt = null;
         setTimeout(() =>  {
             this.data.pojisteni = 'OBODP';
         }, 10);

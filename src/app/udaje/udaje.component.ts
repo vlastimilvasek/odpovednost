@@ -51,6 +51,47 @@ export class UdajeComponent implements OnInit, OnChanges {
         }
     }
 
+    prepocetCeny(kod: string): void {
+        setTimeout(() => {
+            // aktuální hodnota připojištění
+            const value = Number(this.r.params[kod].hodnota);
+            const prip = this.r.extra.filter(e => e.kod === kod)[0];
+            console.log('UDAJE prepocet ceny - kod, value : ', kod + ': ' + value);
+            // výběr připojištění ovlivňuje více parametrů produktu
+            /*
+            if ( Array.isArray(prip.hodnota.linked) ) {
+                prip.hodnota.linked.forEach( (p) => {
+                    if (typeof p === 'object' && p !== null) {
+                        console.log('UDAJE prepocet ceny - opt : ', prip.hodnota.options.filter(e => e.value === value ));
+                        this.data.extra[p.kod] = prip.hodnota.options.filter(e => e.value === value)[0].hodnoty[p.kod];
+                    }
+                });
+            */
+            const volba = prip.hodnota.options.filter(e => e.value === value )[0];
+            if (typeof volba.hodnoty === 'object' && volba.hodnoty !== null) {
+                let changes = {};
+                Object.keys(volba.hodnoty).forEach(function(p) {
+                        // console.log('UDAJE prepocet ceny - volba : ', volba);
+                        console.log('UDAJE prepocet ceny - nastavuji hodnotu : ', p + ': ' + volba.hodnoty[p]);
+                        // nelze měni data napřímo, nějaké chyba v life cyklu, není definováno this - proto dvakrát forEach
+                        changes[p] = volba.hodnoty[p];
+                });
+                console.log('UDAJE prepocet ceny - changes : ', changes);
+                Object.keys(changes).forEach( (p) => {
+                    // u ovlivněného parametru může být nastaven filtr, u měněného nastavit přímo (jinak zacyklení)
+                    if (p === kod) {
+                        this.data.extra[p] = changes[p];
+                    } else {
+                        this.data.extra[p] = Math.max( changes[p], this.data.extra[p]);
+                    }
+                });
+            } else {
+                // výběr připojištění ovlivňuje jen jeden parametr produktu
+                this.data.extra[kod] = value;
+            }
+        });
+    }
+
     ngOnInit() {
         this.localeService.use(this.locale);
         this.bsConfig = Object.assign({}, { containerClass: 'theme-default', dateInputFormat: 'D.M.YYYY' });
@@ -66,6 +107,15 @@ export class UdajeComponent implements OnInit, OnChanges {
 
     ngOnChanges() {
         // this.r = this.offers.filter( x => x.id === this.data.produkt)[0];
-        // console.log('produkt r : ', this.r);
+        console.log('UDAJE - OnChanges produkt r : ', this.r);
+        this.r.extra.forEach( (p) => {
+            if (p.typ === 'select' && p.hodnota.options.length) {
+                p.hodnota.options.forEach( (o) => {
+                    if (o.value > 0) {
+                        o.label += '&nbsp;&nbsp;&nbsp;(+' + o.cena + ' Kč)';
+                    }
+                });
+            }
+        });
     }
 }

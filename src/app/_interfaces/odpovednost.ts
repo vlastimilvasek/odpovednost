@@ -6,6 +6,7 @@ export class ISjednaniResp {
 }
 export class IOdpovednost {
     id: string;
+    extra: any;
     pojisteni: string;
     pojistovna: string;
     produkt: number;

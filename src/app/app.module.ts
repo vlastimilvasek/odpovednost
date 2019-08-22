@@ -5,6 +5,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -39,6 +40,7 @@ import { TelefonFormatPipe } from './_pipes/telefon-format.pipe';
 import { MenaFormatPipe } from './_pipes/mena-format.pipe';
 import { MenaFormatInfoPipe } from './_pipes/mena-format-info.pipe';
 import { SpolFormatPipe } from './_pipes/spol-format.pipe';
+import { TipsPipe } from './_pipes/tips.pipe';
 
 import { RCValidator } from './_directives/RC.validator';
 import { ICValidator } from './_directives/IC.validator';
@@ -60,6 +62,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     AppComponent,
     RootComponent,
     KeysPipe,
+    TipsPipe,
     AdresaComponent,
     PojistnikComponent,
     RCValidator,
@@ -87,6 +90,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     ModalModule.forRoot(),
     TabsModule.forRoot(),
     PopoverModule.forRoot(),
+    TooltipModule.forRoot(),
     ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TypeaheadModule.forRoot(),

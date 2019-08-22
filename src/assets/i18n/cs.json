@@ -63,8 +63,15 @@
 		"MIN_LIMITS": "Minimální limit plnění",
 		"ZDR": "Újma na zdraví a smrt:",
 		"MAJ": "Újma na věci, majetku:",
-		"SPOLUUC": "Spoluúčast",
-		"SPOL_NULL": "pouze bez spoluúčasti",
+		"BOZ": "Základní limit: ",
+        "PEL": "Drobná, přenosná elektronika:",
+		"DZV": "Domácí zvířata:",
+		"HZV": "Hospodářská zvířata:",        
+		"NEM": "Odpovědnost vlastníka nemovitosti:",
+		"PRO": "Škody na pronajaté budově:", 
+        "SPOLUUC": "Spoluúčast",
+        "SPOL_AKC": "akceptuji",
+		"SPOL_NULL": "bez spoluúčasti",
 		"SPOL_MAX": "Přípustná spoluúčast:",
 	    "TOOLS": {
 	    	"TITLE": "Nástroje",
@@ -87,6 +94,15 @@
 		}
     },	
     "SROVNANI": {
+	    "CLOSE": "Skrýt",
+		"PARTNER": "Partner",
+        "TOPPED": "Doporučujeme",
+        "FIRSTINFO": "Máme pro Vás zbrusu <strong>novou kalkulačku cestovního pojištění</strong>.<br />Srovnání nabízí všechny dostupné varianty, kliknutím na řádek zobrazíte detailní přehled produktu.<br />V záhlaví najdete užitečná tlačítka. Pomocí <strong>filtrů</strong> <a class=\"btn btn-outline-secondary btn-sm\"><i class=\"fas fa-ellipsis-v\"></i> Filtry </a> si najdete jen ty nabídky, které vyhovují Vašim požadavkům. <br />Pomocí <strong>Nástrojů</strong> <a class=\"btn btn-outline-secondary btn-sm\"><i class=\"fas fa-cog\"></i></a> si např. uložíte odkaz na Vaši kalkulaci.",
+        "FIRSTINFOBUTTON": "OK, mám to <i class=\"fas fa-times\"></i>",		
+        "PRODUKT": {
+        	"TITLE": "Produkt/Varianta",
+        	"HINT": ""
+        },        
 	    "EXTRAS": {
 	    	"TITLE": "Připojištění",
 	    	"LIMIT_ZSV": "Ztráta svěřených věcí:"
@@ -111,7 +127,7 @@
         	"HINT": "Limit plnění pro nemajetkovou újmu"
 		},
         "PC": {
-        	"TITLE": "Pojistné částka",
+        	"TITLE": "Pojistná částka",
         	"HINT": "Limit pojistného plnění"
         },
         "SPOL": {
@@ -121,14 +137,17 @@
         "UZPL": {
         	"TITLE": "Územní platnost",
         	"HINT": ""
-		},		
+        },
+		"INFO": {
+        	"TITLE": "Více informací",
+            "HINT": "Kliknutím na řádek zobrazíte detailní informace o produktu včetně pojistných podmínek.",
+            "SHOW": "Detail"
+		},        	
 		"KALKULUJI": "Počítám nabídky pojištění odpovědnosti. Prosím o chvilku strpení.",
 		"COLLAPSEHINT": "Kliknutím na logo zobrazíte/skryjete podrobnější informace o produktu.",		
 	    "BACK": "Upravit zadání",
         "ZAMODP": "odpovědnost zaměstnance",
         "OBODP": "občanská odpovědnost",
-        "PARTNER": "Pojišťovna",
-        "PRODUKT": "Produkt/Varianta",
 		"SPLATKA": "Splátka",
 		"DOKUMENTY": "Dokumenty",
 		"PLATBY": "Možné platby"
@@ -139,6 +158,7 @@
 	        "ZAMODP": "Pojištění odpovědnosti zaměstnance",
 	        "OBODP": "Pojištění odpovědnosti v občanském životě"
 		},
+		"PRIPOJISTENI": "Připojištění",
         "POCATEK": {
 	        "LABEL": "Počátek pojištění",
 	        "PLACEHOLDER": "20. 4. 2018",

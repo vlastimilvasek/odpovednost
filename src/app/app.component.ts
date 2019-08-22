@@ -34,17 +34,19 @@ export class AppComponent implements OnInit, OnDestroy {
             'column' : 'col-lg-6',
             'label' : 'col-sm-5',
             'input' : 'col-sm-7',
+            'labelw' : 'col-sm-7',
+            'inputw' : 'col-sm-5',
             'offset' : 'offset-sm-5',
             'label2' : 'col-lg-8 col-sm-5',
             'input2' : 'col-lg-4 col-sm-7',
-            'column1' : 'order-3 order-md-0 col-md-7 col-lg-6 col-xl-7',
-            'column2' : 'order-2 col-md-5 col-lg-5 offset-lg-1 col-xl-4',
+            'column1' : 'order-3 order-md-0 col-md-6 col-lg-6 col-xl-7',
+            'column2' : 'order-2 col-md-6 col-lg-5 offset-lg-1 col-xl-4',
             'info1' : 'col-sm-3 col-md-12',
             'info2' : 'col-sm-9 col-md-12',
         },
         table : true,
         produktCollapsed : {},
-        prvniNapoveda : true,
+        prvniNapoveda : false,
         form_r : {
             'loading' : false,
             'error' : false
@@ -185,6 +187,15 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     }
 
+    IsJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     kalkuluj(): void {
         const produkt = this.data.produkt;
         const produkty_id = [];
@@ -213,7 +224,7 @@ export class AppComponent implements OnInit, OnDestroy {
                     const params = [];
                     const pplatby = [];
                     produkty_id.push(x.id);
-                    x.param_obj = x.params;
+
                     if ( partneri.indexOf(x.pojistovna) === -1 ) {
                         partneri.push( x.pojistovna );
                         partnobj[x.pojistovna] = (partnobj_old[x.pojistovna] !== undefined) ? partnobj_old[x.pojistovna] : true;
@@ -221,15 +232,71 @@ export class AppComponent implements OnInit, OnDestroy {
                     if ( Object.keys(this.layout.produktCollapsed).indexOf(x.id) === -1 ) {
                         this.layout.produktCollapsed[x.id] = true;
                     }
-                    Object.keys(x.params).forEach(function(key) {
-                        params.push(x.params[key]);
-                    });
+
                     Object.keys(x.platby).forEach(function(key) {
                         if (x.platby[key] > 0 && platby.indexOf(Number(key)) === -1) { platby.push(Number(key)); }
                         if (x.platby[key] > 0) { pplatby.push({ key : Number(key), value : x.platby[key]}); }
                     });
-                    x.params = params;
                     x.pplatby = pplatby;
+
+                    // kontrola připojištění - extra
+                    const types = ['radio', 'select'];
+                    // console.log('pocet extras : ', x.extra.length );
+                    if (x.extra.length) {
+                        const extra = x.extra.filter(e => types.indexOf(e.typ) >= 0);
+                        x.extra = [];
+                        extra.forEach((e) => {
+                            if (Object.keys(e).indexOf('hodnota')) {
+                                if (this.IsJsonString(e.hodnota) || (typeof e.hodnota === 'object' && e.hodnota !== null) ) {
+                                    if (!(typeof e.hodnota === 'object' && e.hodnota !== null)) {
+                                        e.hodnota = JSON.parse(e.hodnota);
+                                    }
+                                    if (Object.keys(e.hodnota).indexOf('options')) {  // uprava options na pole
+                                        const opt = [];
+                                        Object.keys(e.hodnota.options).forEach((o) => {
+                                            opt.push(e.hodnota.options[o]);
+                                        });
+                                        e.hodnota.options = opt;
+                                    }
+                                    x.extra.push(e);
+                                } else {
+                                    // console.log('chybný objekt extras : ', e.kod);
+                                }
+
+                            }
+                        });
+
+                        // console.log('APP kalkuluj - extra : ', x.extra);
+                    }
+                    // nastavení parametrů podle odkazu na extra
+                    Object.keys(x.params).forEach(function (key) {
+                        if (x.params[key].typ === 'link') {
+                            const kod = x.params[key].hodnota.split('.')[1];
+                            // console.log('APP kalkuluj - extra kod : ', kod );
+                            const extra = x.extra.filter(e => e.kod === kod)[0];
+                            // console.log('APP kalkuluj - extra : ', extra );
+                            if (typeof extra === 'object' && extra !== null) {
+                                // jedno připojištění má vliv na víc parametrů
+                                if (typeof extra.hodnota.linked === 'object' && extra.hodnota.linked !== null) {
+                                    x.params[key].options = extra.hodnota.linked.filter(e => e.kod === key)[0].options;
+                                } else {
+                                    x.params[key].options = extra.hodnota.options;
+                                }
+                                x.params[key].default = extra.hodnota.default;
+                                if (typeof extra.hodnota.default === 'object' && extra.hodnota.default !== null) {
+                                    x.params[key].hodnota = Number(extra.hodnota.default[key]);
+                                } else {
+                                    x.params[key].hodnota = Number(extra.hodnota.default);
+                                }
+
+                            }
+                        } else if (x.params[key].typ === 'number') {  // nastavení parametrů podle typu
+                            x.params[key].hodnota = Number(x.params[key].hodnota);
+                        } else if (x.params[key].typ === 'bool') {
+                            x.params[key].hodnota = Number(x.params[key].hodnota); // i typ bool musí být číselná hodnota kvůli filtrům
+                            // console.log('APP kalkuluj - param bool : ', JSON.stringify(x.params[key]) );
+                        }
+                    });
                     items.push( Object.assign({}, x) );
                 });
 
@@ -240,18 +307,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
                 this.offers = this.nvoffers = items;
                 console.log('kalkuluj - produkt : ', produkt );
-                console.log('kalkuluj - produkty_id : ', produkty_id );
-                
+                // console.log('kalkuluj - produkty_id : ', produkty_id );
+
                 if (produkt && produkty_id.indexOf(produkt) !== -1) { // zkusím zachovat vybraný produkt při přepočtu
                     this.data.produkt = produkt;
                     this.vprodukt = this.offers.filter( x => x.id === this.data.produkt)[0];
                 }
                 this.kalk_aktivni = false;
-                
+
                 this.filtruj_nabidky();
-                
+
                 // if (this.layout.prvniNapoveda) { this.filtrHint.show(); }
-                setTimeout(() =>  { this.layout.prvniNapoveda = false;  }, 8000);
+                // setTimeout(() =>  { this.layout.prvniNapoveda = false;  }, 8000);
             });
     }
 
@@ -259,15 +326,121 @@ export class AppComponent implements OnInit, OnDestroy {
         // console.log('this.filters.partnobj : ', this.filters.partnobj);
         console.log('offers před filtry : ', this.nvoffers);
         this.offers = this.nvoffers.filter( x => this.filters.partnobj[x.pojistovna] > 0);
+        const pojisteni = this.data.pojisteni;
+
+        // úprava produktu podle požadavku na rozšíření
+        this.offers.forEach((x) => {
+            let cena_pri = 0;
+            const pripojisteni = {};
+            let extras = ['pel', 'hzv', 'nem', 'pro', 'spol'];
+            let i = 0;
+            while (extras[i]) {
+                // u "balíčků" musím případně opakovaně ověřovat hodnoty provázaných parametrů
+                // extras.forEach( (e) => {
+                const e = extras[i];
+                i++;
+                // console.log('APP filtruj_nabidky - podle : ', e);
+                // console.log('APP filtruj_nabidky - e (extra) x (produkt) : ', x.params[e]);
+                // má produkt takové připojištění?
+                if (typeof x.params[e] === 'object' && x.params[e] !== null && x.params[e].typ === 'link') {
+                    // výchozí hodnota
+                    if (typeof x.params[e].default === 'object' && x.params[e].default !== null) {
+                        Object.keys(x.params[e].default).forEach((p) => {
+                            x.params[p].hodnota = x.params[e].default[p];
+                        });
+                    } else {
+                        x.params[e].hodnota = x.params[e].default;
+                    }
+                    // console.log('APP filtruj_nabidky - x.params.e : ', x.params[e]);
+                    if (Number(x.params[e].hodnota) < this.data.extra[e]) { // lze navýšit?
+                        // console.log('APP filtruj_nabidky - product kalk : ', x.kalk);
+                        const opt = x.params[e].options.filter(o => Number(o.value) >= this.data.extra[e])[0];
+                        if (typeof opt === 'object' && opt !== null) {
+                            // výběr připojištění ovlivňuje více parametrů produktu
+                            if (Array.isArray(opt.linked)) {
+                                opt.linked.forEach((p) => {
+                                    if (typeof p === 'object' && p !== null) {
+                                        const lkod = Object.keys(p)[0];
+                                        x.params[lkod].hodnota = p[lkod];
+                                        // console.log('APP filtruj_nabidky - opt linked : ', lkod + ' ' + p[lkod]);
+                                        if (Number(x.params[lkod].hodnota) < this.data.extra[lkod]) {
+                                            // když hodnota provázaného parametru nesplňuje filtr, musím znova projít filtrováním
+                                            extras.push(lkod);
+                                            // console.log('APP filtruj_nabidky - nedostatečný opt linked : ', lkod + ' ' + p[lkod] + ' ' + this.data.extra[lkod]);
+                                        } else {
+                                            // když je hodnota OK, tak znova nechci procházet, byla by nastavena na default parametru
+                                            extras = extras.filter(o => o !== lkod);
+                                            // a dopočítám cenu - volba provázaného parametru buď podle hodnoty jeho filtru nebo odkazujícího parametru
+                                            const lopt = x.params[lkod].options.filter(o => Number(o.value) >= Math.max(this.data.extra[lkod], p[lkod]))[0];
+                                            // console.log('APP filtruj_nabidky - opt linked dopočítání ceny : ', lopt);
+                                            if (typeof lopt === 'object' && lopt !== null) {
+                                                pripojisteni[lkod] = Number(lopt.cena);
+                                            }
+                                            // console.log('APP filtruj_nabidky - opt linked pripojisteni : ', pripojisteni);
+                                        }
+                                    }
+                                });
+                            }
+                            x.params[e].hodnota = Number(opt.value);
+                            // console.log('APP filtruj_nabidky - opt[0] : ', opt);
+                            pripojisteni[e] = Number(opt.cena);
+                            // console.log('APP filtruj_nabidky - pripojisteni : ', pripojisteni);
+                        }
+                    }
+                }
+            }
+            Object.keys(pripojisteni).forEach(key => { cena_pri += pripojisteni[key]; });
+            // console.log('APP filtruj_nabidky - cena pripojisteni : ', x.id + ': ' + cena_pri);
+            // console.log('APP filtruj_nabidky - ceny pripojisteni : ', pripojisteni);
+            const pplatby = [];
+            x.vypocet = {};
+            Object.keys(x.platby).forEach(function(key) {
+                // Výpočet plateb
+                // console.log('APP filtruj_nabidky - platby key : ', key);
+                if (pojisteni === 'OBODP') {
+                    if ( ['Slavia'].indexOf(x.pojistovna) !== -1 ) {
+                        x.platby[key] = Math.floor( (x.odp_cena + cena_pri) * x.k_platby[key] * ( x.odp_sleva - (1-x.c_platby[key])));
+                        x.vypocet[key] = x.platby[key] + ' = round( (' + x.odp_cena + '+' + cena_pri + ')*' + x.k_platby[key] + '*(' + x.odp_sleva + '-(1-' + x.c_platby[key] + '))';
+                    } else {
+                        x.platby[key] = Math.round( ((x.odp_cena * x.k_platby[key]) + cena_pri) * x.odp_sleva * x.c_platby[key]);
+                        x.vypocet[key] = x.platby[key] + ' = round( (' + x.odp_cena + '*' + x.k_platby[key] + ') + ' + cena_pri + ')*' + x.odp_sleva + '*' + x.c_platby[key] + ')';
+                    }
+                } else if (pojisteni === 'ZAMODP') {
+                    if ( ['Slavia'].indexOf(x.pojistovna) !== -1 ) {
+                        x.platby[key] = Math.floor( (x.zam_cena + cena_pri) * x.k_platby[key] * ( x.zam_sleva - (1-x.c_platby[key])));
+                        x.vypocet[key] = x.platby[key] + ' = round( (' + x.zam_cena + '+' + cena_pri + ')*' + x.k_platby[key] + '*(' + x.zam_sleva + '-(1-' + x.c_platby[key] + '))';
+                    } else {
+                        x.platby[key] = Math.round( ((x.zam_cena * x.k_platby[key]) + cena_pri) * x.zam_sleva * x.c_platby[key]);
+                        x.vypocet[key] = x.platby[key] + ' = round( (' + x.zam_cena + '*' + x.k_platby[key] + ') + ' + cena_pri + ')*' + x.zam_sleva + '*' + x.c_platby[key] + ')';
+                    }
+                }
+                // Ověření minimálního pojistného
+                if (x.min_poj.mod === 'strict') {
+                    if (x.platby[key] < x.min_poj.hodnota) { x.platby[key] = -2; }
+                } else {
+                    if (x.platby[key] < x.min_poj.hodnota) { x.platby[key] = x.min_poj.hodnota; }
+                }
+
+                if (x.platby[key] > 0) { pplatby.push({ key : Number(key), value : x.platby[key]}); }
+            });
+            x.pripojisteni = pripojisteni;
+            x.pplatby = pplatby;
+
+        });
+
         this.offers = this.offers.filter( x => Number(x.platby[this.data.platba]) > 0);
         if (this.data.pojisteni === 'OBODP') {
-            this.offers = this.offers.filter( x => Number(x.param_obj.zdr.hodnota) >= this.filters.min_zdr);
-            this.offers = this.offers.filter( x => Number(x.param_obj.maj.hodnota) >= this.filters.min_maj);
-            this.offers = this.offers.filter( x => Number(x.param_obj.spol.hodnota) <= (this.filters.spoluuc ? 0 : 100000) );
+            this.offers = this.offers.filter( x => Number(x.params.boz.hodnota) + 2 >= this.filters.boz);
+            this.offers = this.offers.filter( x => Number(x.params.pel.hodnota) + 2 >= this.data.extra.pel);
+            this.offers = this.offers.filter( x => Number(x.params.hzv.hodnota) + 2 >= this.data.extra.hzv);
+            this.offers = this.offers.filter( x => Number(x.params.nem.hodnota) + 2 >=  this.data.extra.nem);
+            this.offers = this.offers.filter( x => Number(x.params.pro.hodnota) + 2 >= this.data.extra.pro);
+            this.offers = this.offers.filter( x => Number(x.params.spol.hodnota) >= this.data.extra.spol);
         } else if (this.data.pojisteni === 'ZAMODP') {
-            this.offers = this.offers.filter( x => Number(x.param_obj.slevel.hodnota) <= this.filters.max_spol);
-            this.offers = this.offers.filter( x => Number(x.param_obj.zsv.hodnota) + 1 >= this.data.limit_zsv);
+            this.offers = this.offers.filter( x => Number(x.params.slevel.hodnota) <= this.filters.max_spol);
+            this.offers = this.offers.filter( x => Number(x.params.zsv.hodnota) + 1 >= this.data.limit_zsv);
         }
+
         console.log('offers po filtrech : ', this.offers);
         function sortp(c) { return function(a, b) { return a.platby[c] - b.platby[c]; }; } // console.log(a.platby[c] + ' ' + b.platby[c]);
         this.offers.sort(sortp(this.data.platba));
@@ -276,6 +449,13 @@ export class AppComponent implements OnInit, OnDestroy {
     initData(data: IOdpovednost): void {
         this.data = data || {
             id: '',
+            extra: {
+                pel: 0,
+                hzv: 0,
+                nem: 0,
+                pro: 0,
+                spol : -100000
+            },
             pojisteni: this.route.snapshot.queryParams['pojisteni'] || null,
             pojistovna: '',
             produkt: null,
@@ -394,9 +574,12 @@ export class AppComponent implements OnInit, OnDestroy {
         });
 
         this.filters = {
-            min_zdr : 0,
-            min_maj : 0,
-            spoluuc : 0,
+            boz : 0,
+            pel : 0,
+            dzv : 0,
+            hzv : 0,
+            nem : 0,
+            pro : 0,
             max_spol : 3,
             limit_zsv : -1
         };
