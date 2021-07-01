@@ -30,7 +30,7 @@ export class AdresaComponent implements OnInit {
     }
 
     ObecChange(obec): void {
-        if (!obec) { this.data.cast_obce_id =  this.data.adr_id = ''; }
+        if (!obec) { this.data.cast_obce_id = this.data.adr_id = ''; }
     }
 
     CPOnSelect(e: TypeaheadMatch): void {

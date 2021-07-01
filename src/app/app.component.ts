@@ -332,7 +332,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.offers.forEach((x) => {
             let cena_pri = 0;
             const pripojisteni = {};
-            let extras = ['pel', 'hzv', 'nem', 'pro', 'spol'];
+            let extras = ['pel', 'hzv', 'nem', 'pro', 'spol', 'zsv', 'ppp'];
             let i = 0;
             while (extras[i]) {
                 // u "balíčků" musím případně opakovaně ověřovat hodnoty provázaných parametrů
@@ -406,9 +406,9 @@ export class AppComponent implements OnInit, OnDestroy {
                         x.vypocet[key] = x.platby[key] + ' = round( (' + x.odp_cena + '*' + x.k_platby[key] + ') + ' + cena_pri + ')*' + x.odp_sleva + '*' + x.c_platby[key] + ')';
                     }
                 } else if (pojisteni === 'ZAMODP') {
-                    if ( ['Slavia'].indexOf(x.pojistovna) !== -1 ) {
-                        x.platby[key] = Math.floor( (x.zam_cena + cena_pri) * x.k_platby[key] * ( x.zam_sleva - (1-x.c_platby[key])));
-                        x.vypocet[key] = x.platby[key] + ' = round( (' + x.zam_cena + '+' + cena_pri + ')*' + x.k_platby[key] + '*(' + x.zam_sleva + '-(1-' + x.c_platby[key] + '))';
+                    if ( ['ČSOB Pojišťovna'].indexOf(x.pojistovna) !== -1 ) {
+                        x.platby[key] = Math.floor( Math.floor( (x.zam_cena * x.k_platby[key] + cena_pri) * x.zam_sleva) * x.c_platby[key]);
+                        x.vypocet[key] = x.platby[key] + ' = floor( floor( (' + x.zam_cena + '*' + x.k_platby[key] + ') + ' + cena_pri + ')*' + x.zam_sleva + ')*' + x.c_platby[key] + ')';
                     } else {
                         x.platby[key] = Math.round( ((x.zam_cena * x.k_platby[key]) + cena_pri) * x.zam_sleva * x.c_platby[key]);
                         x.vypocet[key] = x.platby[key] + ' = round( (' + x.zam_cena + '*' + x.k_platby[key] + ') + ' + cena_pri + ')*' + x.zam_sleva + '*' + x.c_platby[key] + ')';
@@ -416,7 +416,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 // Ověření minimálního pojistného
                 if (x.min_poj.mod === 'strict') {
-                    if (x.platby[key] < x.min_poj.hodnota) { x.platby[key] = -2; }
+                    if (Number(key) > 1 && (x.platby[key] < x.min_poj.hodnota)) { x.platby[key] = -2; }
                 } else {
                     if (x.platby[key] < x.min_poj.hodnota) { x.platby[key] = x.min_poj.hodnota; }
                 }
@@ -438,7 +438,8 @@ export class AppComponent implements OnInit, OnDestroy {
             this.offers = this.offers.filter( x => Number(x.params.spol.hodnota) >= this.data.extra.spol);
         } else if (this.data.pojisteni === 'ZAMODP') {
             this.offers = this.offers.filter( x => Number(x.params.slevel.hodnota) <= this.filters.max_spol);
-            this.offers = this.offers.filter( x => Number(x.params.zsv.hodnota) + 1 >= this.data.limit_zsv);
+            this.offers = this.offers.filter( x => Number(x.params.zsv.hodnota) + 1 >= this.data.extra.zsv);
+            this.offers = this.offers.filter( x => Number(x.params.ppp.hodnota) + 1 >= this.data.extra.ppp);
         }
 
         console.log('offers po filtrech : ', this.offers);
@@ -454,7 +455,9 @@ export class AppComponent implements OnInit, OnDestroy {
                 hzv: 0,
                 nem: 0,
                 pro: 0,
-                spol : -100000
+                spol : -100000,
+                zsv: 0,
+                ppp: 0
             },
             pojisteni: this.route.snapshot.queryParams['pojisteni'] || null,
             pojistovna: '',
@@ -476,9 +479,6 @@ export class AppComponent implements OnInit, OnDestroy {
             rizeni_nakl: 0,
             rizeni_str: 0,
             uz_platnost: 1,
-            limit_rv: '',
-            limit_str: '',
-            limit_zsv: 0,
             pz: '',
             platba: 1,
             pojistnik : {
@@ -550,7 +550,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.GAEvent('ODP', 'Kalkulace', 'Filtrování nabídek', 1);
         });
 
-        this.valueChangesSubscriber['z'] = this.zadani_form.valueChanges.pipe(debounceTime(40)).subscribe(form => {
+        this.valueChangesSubscriber['z'] = this.zadani_form.valueChanges.pipe(debounceTime(400)).subscribe(form => {
             console.log('změna zadani_form');
             this.zadani_form.submitted = false;
             this.offers = [];
@@ -580,8 +580,7 @@ export class AppComponent implements OnInit, OnDestroy {
             hzv : 0,
             nem : 0,
             pro : 0,
-            max_spol : 3,
-            limit_zsv : -1
+            max_spol : 3
         };
 
         this.srovnani = {

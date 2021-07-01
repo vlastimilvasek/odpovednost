@@ -27,9 +27,6 @@ export class IOdpovednost {
     rizeni_nakl: number;
     rizeni_str: number;
     uz_platnost: number;
-    limit_rv: any;
-    limit_str: any;
-    limit_zsv: any;
     pz: any;
     platba: number;
     pojistnik: IPojistnik;

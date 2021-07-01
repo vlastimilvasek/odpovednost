@@ -316,14 +316,14 @@
                 <tabset [vertical]="false" type="pills">
                     <tab *ngFor="let r of offers" heading="{{ r.produkt }}">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
                                 <h4>Obchodní sleva</h4>
                                 <p>OBODP: {{ r?.odp_sleva }}</p>
                                 <p>ZAMODP: {{ r?.zam_sleva }}</p>
                                 <h4>Připojištění</h4>
                                 <p>{{ r?.pripojisteni | json }}</p>
                             </div>
-                            <div class="col-6">
+                            <div class="col-8">
                                 <h4>Výpočet plateb</h4>
                                 <p>Ročně: {{ r?.vypocet[1] }}</p>
                                 <p>Pololetně: {{ r?.vypocet[2] }}</p>

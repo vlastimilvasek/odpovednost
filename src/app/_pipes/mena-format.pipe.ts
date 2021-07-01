@@ -12,6 +12,8 @@ export class MenaFormatPipe implements PipeTransform {
             if (cislo > 0) {
                 if (cislo === 999999) {
                     res = 'neomezeno';
+                } else if (cislo === 1) {
+                    res = '<div class="text-right"><i class="text-success fas fa-check mr-4"></i></div>';
                 } else if (false) {
 //                if ((cislo % 100000) === 0) {
 //                    res = '<div class="text-right">' + (cislo / 1000000).toString() + '&nbsp;mil.&nbsp;Kč</div>';
@@ -23,7 +25,7 @@ export class MenaFormatPipe implements PipeTransform {
                     // res = '<span style="float:right">' + cislo.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&nbsp;') + '&nbsp;Kč</span>';
                 }
             } else if (cislo === -1) {
-                res = '<div class="text-right"><i class="mr-4 text-primary far fa-lg fa-plus-square"></i></div>';
+                res = '<div class="text-right"><i class="mr-4 fas fa-lg fa-minus"></i></div>';
             } else if (cislo === -2) {
                 res = '<div class="text-right"><i class="mr-4 text-danger fas fa-lg fa-times"></i></div>';
             }

@@ -5,12 +5,12 @@
 	<div class="form-group text-center mb-4">
 		<div class="btn-group btn-group-toggle" data-toggle="buttons">
 		  <label class="btn btn-outline-primary" (click)="vyberZam();" [class.active]="data.pojisteni === 'ZAMODP'">
-		    <input name="pojisteni" (ngModel)="data.pojisteni" #Pojisteni="ngModel" value="ZAMODP" type="radio" required />
+		    <input name="pojisteni" [(ngModel)]="data.pojisteni" #Pojisteni="ngModel" value="ZAMODP" type="radio" required />
 		    <i class="icon shape-o-odpovednost fa-4x"></i><br />
 		    {{ 'POJISTKA.POJISTENI.ZAMODP' | translate }}
 		  </label>
 		  <label class="btn btn-outline-primary" (click)="vyberObc();" [class.active]="data.pojisteni === 'OBODP'">
-		    <input name="pojisteni" (ngModel)="data.pojisteni" #Pojisteni="ngModel" value="OBODP" type="radio" required />
+		    <input name="pojisteni" [(ngModel)]="data.pojisteni" #Pojisteni="ngModel" value="OBODP" type="radio" required />
 		    <i class="icon shape-o-obcanska fa-4x"></i><br />
 		    {{ 'POJISTKA.POJISTENI.OBODP' | translate }}
 		  </label>

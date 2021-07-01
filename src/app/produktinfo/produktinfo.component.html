@@ -9,10 +9,10 @@
 						<div class="clearfix">{{ r.params.pc.popis }}<span style="float:right" [innerHTML]="r.params.pc.hodnota | menaFormat"></span></div>
                         <div class="clearfix">{{ r.params.spol.popis }}<span style="float:right" [innerHTML]="r.params.spol.hodnota | spolFormat"></span></div>
                         <div class="clearfix">{{ r.params.uzpl.popis }}<span style="float:right" [innerHTML]="r.params.uzpl.hodnota"></span></div>
-						<div class="clearfix">{{ r.params.r_voz.popis }}<span style="float:right" [innerHTML]="r.params.r_voz.hodnota | menaFormatInfo"></span></div>
-                        <div class="clearfix">{{ r.params.r_sou.popis }}<span style="float:right" [innerHTML]="r.params.r_sou.hodnota | menaFormatInfo"></span></div>
-                        <div class="clearfix">{{ r.params.r_nakl.popis }}<span style="float:right" [innerHTML]="r.params.r_nakl.hodnota | menaFormatInfo"></span></div>
-                        <div class="clearfix">{{ r.params.r_str.popis }}<span style="float:right" [innerHTML]="r.params.r_str.hodnota | menaFormatInfo"></span></div>
+						<div class="clearfix">{{ r.params.r_voz.popis }}<span style="float:right" [innerHTML]="r.params.r_voz.hodnota | menaFormat"></span></div>
+                        <div class="clearfix">{{ r.params.r_sou.popis }}<span style="float:right" [innerHTML]="r.params.r_sou.hodnota | menaFormat"></span></div>
+                        <div *ngIf="data.rizeni_nakl" class="clearfix">{{ r.params.r_nakl.popis }}<span style="float:right" [innerHTML]="r.params.r_nakl.hodnota | menaFormat"></span></div>
+                        <div *ngIf="data.rizeni_str" class="clearfix">{{ r.params.r_str.popis }}<span style="float:right" [innerHTML]="r.params.r_str.hodnota | menaFormat"></span></div>
                     </div>
                     <h5 *ngIf="r.pplatby.length" class="vagl mt-4">{{ 'SROVNANI.PLATBY' | translate }}</h5>                    
 					<div *ngIf="r.pplatby.length">

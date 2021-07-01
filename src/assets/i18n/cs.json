@@ -69,7 +69,9 @@
 		"HZV": "Hospodářská zvířata:",        
 		"NEM": "Odpovědnost vlastníka nemovitosti:",
 		"PRO": "Škody na pronajaté budově:", 
-        "SPOLUUC": "Spoluúčast",
+		"ZSV": "Ztráta svěřené věci:",
+		"PPP": "Připojištění pokut a penále:", 
+		"SPOLUUC": "Spoluúčast",
         "SPOL_AKC": "akceptuji",
 		"SPOL_NULL": "bez spoluúčasti",
 		"SPOL_MAX": "Přípustná spoluúčast:",
@@ -190,9 +192,9 @@
 	        "HINT": ""
 		},		
         "RIZENI_VOZ": {
-	        "LABEL": "Řízení firemního vozidla?",
+	        "LABEL": "Řízení vozidla kateg. 'B'?",
 			"PLACEHOLDER": "",
-	        "HINT": "Má pojištění krýt i škody související s provozem služebního vozu?"
+	        "HINT": "Má pojištění krýt i škody související s provozem služebního vozu? Netýká se řidičů z povolání, kurýrů apod."
 		},
         "RIZENI_SOU": {
 	        "LABEL": "Užití vozidla i pro soukromé cesty?",
@@ -200,14 +202,14 @@
 	        "HINT": "Má pojištění krýt i škody související s provozem služebního vozu mimo pracovní cesty, při soukromém využití, např. o víkendu?"
 		},
         "RIZENI_NAKL": {
-	        "LABEL": "Řízení nákladního vozidla?",
+	        "LABEL": "Řízení ostatních vozidel?",
 			"PLACEHOLDER": "",
-	        "HINT": ""
+	        "HINT": "Řídíte v práci autobus, kolejové nebo nákladní vozidlo? Má pojištění krýt související škody?"
 		},
         "RIZENI_STR": {
 	        "LABEL": "Řízení pracovního stroje?",
 			"PLACEHOLDER": "",
-	        "HINT": ""
+	        "HINT": "Řídíte v práci např. bagr, jeřáb nebo ve skladu jezdíte s vysokozdvižným vozíkem? Má pojištění krýt související škody?"
 		},
         "UZ_PLATNOST": {
 	        "LABEL": "Územní platnost",

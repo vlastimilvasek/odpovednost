@@ -11,8 +11,8 @@ export class MenaFormatInfoPipe implements PipeTransform {
 
         if (obj.typ === 'bool') {
             const isBoolean = val => Boolean(val) === val;
-            const val = (obj.hodnota === 'true');
-            // console.log('menaPipeinfo ', isBoolean(val) + ' ' + val);
+            const val = (obj.hodnota === 'true' || obj.hodnota === 1);
+            console.log('menaPipeinfo ', isBoolean(val) + ' ' + val);
             if (isBoolean(val)) {
                 if (val) {
                     res = '<i class="text-success fas fa-check mr-4"></i>';
