@@ -26,7 +26,7 @@ import { AppComponent } from './app.component';
 import { ZadaniComponent } from './zadani/zadani.component';
 import { KloaderComponent } from './kloader/kloader.component';
 import { AdresaComponent } from './adresa/adresa.component';
-import { PojistnikComponent } from './pojistnik/pojistnik.component';
+import { OsobaComponent } from './osoba/osoba.component';
 import { PojistenyComponent } from './pojisteny/pojisteny.component';
 import { SrovnaniComponent } from './srovnani/srovnani.component';
 import { UdajeComponent } from './udaje/udaje.component';
@@ -64,7 +64,7 @@ const CustomSelectOptions: INgxSelectOptions = {
     KeysPipe,
     TipsPipe,
     AdresaComponent,
-    PojistnikComponent,
+    OsobaComponent,
     RCValidator,
     ICValidator,
     TelefonFormatPipe,

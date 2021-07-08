@@ -5,16 +5,17 @@ import { ControlContainer, NgForm } from '@angular/forms';
 import { ParamsService } from '../_services/params.service';
 
 @Component({
-    selector: 'app-pojistnik',
-    templateUrl: './pojistnik.component.html',
-    styleUrls: ['./pojistnik.component.css'],
+    selector: 'app-osoba',
+    templateUrl: './osoba.component.html',
+    styleUrls: ['./osoba.component.css'],
     providers: [ ParamsService ],
     viewProviders: [ { provide: ControlContainer, useExisting: NgForm } ]
 })
-export class PojistnikComponent implements OnInit {
+export class OsobaComponent implements OnInit {
     @Input() data;
     @Input() submitted;
     @Input() layout;
+    @Input() role;    
     lists = {
         pojistnik: [],
     };

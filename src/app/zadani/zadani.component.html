@@ -61,8 +61,8 @@
                     <i *ngIf="('POJISTKA.VEK.HINT' | translate) !== ''" class="far fa-question-circle label-hint"></i>
 				</label>
 				<div class="{{ layout.grid.input }}">
-					<input name="vek" class="form-control" type="text" placeholder="{{ 'POJISTKA.VEK.PLACEHOLDER' | translate }}"
-						[(ngModel)]="data.vek" #vek="ngModel" telefonFormat required />
+					<input name="vek" class="form-control" type="number" placeholder="{{ 'POJISTKA.VEK.PLACEHOLDER' | translate }}"
+						[(ngModel)]="data.vek" #vek="ngModel" required />
 				</div>
 				<small [hidden]="vek.valid || (vek.pristine && !submitted)" class="text-danger offset-sm-5 {{ layout.grid.input }}">
 					{{ 'FORM.VALIDATION.REQUIRED' | translate }}
@@ -223,7 +223,7 @@
 					    <input name="uz_platnost" [(ngModel)]="data.uz_platnost" [value]="1" type="radio" required />
 					    {{ 'POJISTKA.UZ_PLATNOST.EVROPA' | translate }}
 					  </label>
-					  <label class="btn btn-outline-primary" [class.active]="data.uz_platnost === 0">
+					  <label class="btn btn-outline-primary" [class.active]="data.uz_platnost === 2">
 					    <input name="uz_platnost" [(ngModel)]="data.uz_platnost" [value]="0" type="radio" />
 					    {{ 'POJISTKA.UZ_PLATNOST.CR' | translate }}
 					  </label>

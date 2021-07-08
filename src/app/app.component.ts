@@ -8,11 +8,11 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as pdfSrovnani from './_pdf-templates/srovnani';
 
 // Data and Service
-import { IOdpovednost, ISrovnani } from './_interfaces/odpovednost';
+import { IOdpovednost, ISrovnani, Odpovednost } from './_interfaces/odpovednost';
 import { ParamsService } from './_services/params.service';
 import { DataService } from './_services/data.service';
 import { SrovnaniComponent } from './srovnani/srovnani.component';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'app-main',
@@ -69,7 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
     @ViewChild('debugModal', { static: true }) debug_modal: any;
     @ViewChild('filtrHint', { static: true }) filtrHint: any;
     @ViewChild('stepTabs', { static: true }) staticTabs: TabsetComponent;
-    @ViewChild('layoutHelper', { static: false }) layout_helper: any;
+    @ViewChild('layoutHelper') layout_helper: any;
     // version = require('../../package.json').version;
 
     @HostListener('document:keypress', ['$event'])
@@ -447,98 +447,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.offers.sort(sortp(this.data.platba));
     }
 
-    initData(data: IOdpovednost): void {
-        this.data = data || {
-            id: '',
-            extra: {
-                pel: 0,
-                hzv: 0,
-                nem: 0,
-                pro: 0,
-                spol : -100000,
-                zsv: 0,
-                ppp: 0
-            },
-            pojisteni: this.route.snapshot.queryParams['pojisteni'] || null,
-            pojistovna: '',
-            produkt: null,
-            sjed_cislo: null,
-            sjed_status: null,
-            sjed_datum: this.route.snapshot.queryParams['sjed_datum'] || new Date(),
-            pocatek: this.route.snapshot.queryParams['pocatek'] || new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-            konec: '',
-            pojistne: null,
-            provize: null,
-            pc: this.route.snapshot.queryParams['pc'] || '100000',
-            vek: this.route.snapshot.queryParams['vek'] || '',
-            povolani: this.route.snapshot.queryParams['povolani'] || '',
-            profese: '',
-            spoluc: '',
-            rizeni_voz: 0,
-            rizeni_sou: 0,
-            rizeni_nakl: 0,
-            rizeni_str: 0,
-            uz_platnost: 1,
-            pz: '',
-            platba: 1,
-            pojistnik : {
-                'typ' : '1',
-                'titul' : '',
-                'titul_za' : '',
-                'jmeno' : '',
-                'prijmeni' : '',
-                'spolecnost' : '',
-                'rc' : '',
-                'ic' : '',
-                'platce_dph' : false,
-                'telefon' : '',
-                'email' : '',
-                'adresa' : {
-                    'psc' : '',
-                    'cast_obce_id' : '',
-                    'obec' : '',
-                    'ulice' : '',
-                    'cp' : '',
-                    'adr_id' : ''
-                },
-                'kadresa' : false,
-                'kor_adresa' : {
-                    'psc' : '',
-                    'cast_obce_id' : '',
-                    'obec' : '',
-                    'ulice' : '',
-                    'cp' : '',
-                    'adr_id' : ''
-                }
-            },
-            pojistenypojistnik: true,
-            pojisteny: {
-                'typ' : '1',
-                'titul' : '',
-                'titul_za' : '',
-                'jmeno' : '',
-                'prijmeni' : '',
-                'spolecnost' : '',
-                'rc' : '',
-                'ic' : '',
-                'adresa' : {
-                    'psc' : '',
-                    'cast_obce_id' : '',
-                    'obec' : '',
-                    'ulice' : '',
-                    'cp' : '',
-                    'adr_id' : ''
-                },
-            },
-            poznamka: '',
-            promo_kod: '',
-            ziskatel: '',
-            id_sml: null,
-            ipadr: '',
-            email: '',
-            link: ''
-        };
-        this.zadani_form.submitted = false;
+    initData(): void {
+        this.data = new Odpovednost(null);
     }
 
     ngOnInit() {
@@ -589,27 +499,14 @@ export class AppComponent implements OnInit, OnDestroy {
             time: ''
         };
 
-        this.initData(null);
+        this.data = new Odpovednost(null);
 
-        let input_data = null;
+        let inputData = null;
         if (this.route.snapshot.queryParams['id'] !== undefined ) {
-            this.data_loading = true;
             this.paramsService.getKalkulace( this.route.snapshot.queryParams['id'] )
             .subscribe( data => {
-                // console.log('data ', data);
-                try {
-                    input_data = data;
-                    if (input_data.pocatek) {
-                        input_data.pocatek = new Date(input_data.pocatek);
-                    }
-                    if (input_data.profese) {
-                        input_data.profese = input_data.profese.toString();
-                    }
-                } catch (e) {
-                    // console.log(e);
-                }
-                // this.initData(input_data);
-                this.data =  Object.assign({}, this.data, input_data);
+                console.log('APP - getKalkulace data ', data);
+                this.data = new Odpovednost(data);
                 setTimeout(() =>  {
                     // console.log('zadani_form form valid', this.zadani_form.form.valid );
                     this.data_loading = false;
@@ -619,18 +516,28 @@ export class AppComponent implements OnInit, OnDestroy {
                     }
                 }, 50);
             });
-        } else if (this.route.snapshot.queryParams['data'] !== undefined ) {
-            // console.log('data snapshot', this.route.snapshot.queryParams['data'] );
+        } else if (this.route.snapshot.queryParams.data !== undefined ) {
+            console.log('APP - ngOnInit - data snapshot', this.route.snapshot.queryParams['data'] );
             try {
-                input_data = JSON.parse(this.route.snapshot.queryParams['data']);
-                // this.initData(input_data);
-                this.data =  Object.assign({}, this.data, input_data);
+                inputData = JSON.parse(this.route.snapshot.queryParams.data);
+                this.data = new Odpovednost(inputData);
+                // this.data =  Object.assign({}, this.data, inputData);
             } catch (e) {
                 // console.log(e);
             }
         }
-        // console.log(this.zadani_form.value);
+        // volání o nové ID, vrací se i rychleji než jsou načtena data kalkulace, ale asi ničemu nevadí - jistota, že máme ID
+        /*
+        if (!this.data.id ) {
+            this.paramsService.getNewId()
+            .subscribe( data => {
+                this.data.id = this.data.id ? this.data.id : data['id'];
+                // console.log('APP getNewId ', data);
+            });
+        }
+        */
     }
+
     ngOnDestroy() {
         this.dataservice.data = this.data;
         this.dataservice.vprodukt = this.vprodukt;

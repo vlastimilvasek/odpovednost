@@ -82,7 +82,14 @@ export class ParamsService {
     getHledej(co, token, data) {
         // console.log('https://www.srovnavac.eu/ruian/hledej?q=' + co + '&coid=' + data.cast_obce_id
         //     + '&psc=' + data.psc + '&cp=' + data.cp + '&ulice=' + data.ulice + '&obec=' + data.obec);
-        return this.http.get<any[]>('https://www.srovnavac.eu/ruian/hledej?q=' + co + '&coid=' + data.cast_obce_id
-             + '&psc=' + data.psc + '&cp=' + data.cp + '&ulice=' + data.ulice + '&obec=' + data.obec);
+        let cp = data.cp.split("/");
+        if (cp.length > 1) cp = cp[0];
+        return this.http.get<any[]>('https://www.srovnavac.eu/ruian/hledej?q=' + co
+             + '&coid=' + (data.cast_obce_id ? data.cast_obce_id : '')
+             + '&psc=' + (data.psc ? data.psc : '')
+             + '&cp=' + (cp ? cp : '')
+             + '&ulice='+ (data.ulice ? data.ulice : '')
+             + '&obec=' + (data.obec ? data.obec : '')
+            );
     }
 }

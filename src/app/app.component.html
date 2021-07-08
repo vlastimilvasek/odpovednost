@@ -30,6 +30,7 @@
 		<div class="visible-xs text-center alert alert-danger" role="alert">Rozlišení XS</div>
 	</div>
 
+	<div #Top></div>
   <tabset id="stepTabs" #stepTabs type="pills" [justified]="true">
     <tab>
     	<ng-template tabHeading>
@@ -41,7 +42,7 @@
 			<div class="row align-items-center" *ngIf="data.pojisteni === 'ZAMODP' || data.pojisteni === 'OBODP'">
 				<div class="col-md-2"></div>  			
 				<div class="col-md-8 text-center">
-					<button type="submit" class="btn btn-success btn-lg mt-4" [ngx-scroll-to]="'app'" [ngx-scroll-to-duration]="200">
+					<button type="submit" class="btn btn-success btn-lg mt-4" (click)="Top.scrollIntoView({ behavior: 'smooth', block: 'start' })">
 						{{ 'FORM.BUTTONS.SROVNAT' | translate }} 
 						<i class="fa fa-chevron-right" *ngIf="kalk_aktivni === false"></i>
 						<i class="fa fa-spinner fa-spin" *ngIf="kalk_aktivni === true"></i>
@@ -136,7 +137,7 @@
 			{{ 'POJISTKA.NENIPRODUKT' | translate }}&nbsp;&nbsp;
 			<button type="button" class="btn btn-outline-secondary btn-sm"
 				(click)="offers.length ? (staticTabs.tabs[1].active = true) : (staticTabs.tabs[0].active = true)"
-				[ngx-scroll-to]="'app'" [ngx-scroll-to-duration]="200">
+				>
 				<i class="fa fa-chevron-left"></i> {{ 'FORM.BUTTONS.ZPET' | translate }}
 			</button>			
 		</div>
@@ -144,7 +145,7 @@
 		<div *ngIf="data.produkt">
 			<app-udaje [(data)]="data" [r]="vprodukt" [layout]="layout" [submitted]="u.submitted" required></app-udaje>
 			<div class="form-group text-center">
-				<button type="submit" class="btn btn-success btn-lg mt-4" [ngx-scroll-to]="'app'" [ngx-scroll-to-duration]="200">
+				<button type="submit" class="btn btn-success btn-lg mt-4" (click)="Top.scrollIntoView({ behavior: 'smooth', block: 'start' })">
 					{{ 'FORM.BUTTONS.DALE' | translate }} <i class="fa fa-chevron-right"></i>
 				</button>
 			</div>
@@ -161,7 +162,7 @@
 		</h3> 
     	<form #o="ngForm" (ngSubmit)="submitOsobni(o)" novalidate [class.submitted]="o.submitted">
 			<h4 class="vagl text-primary">{{ 'OSOBA.POJISTNIK.LABEL' | translate }}</h4>
-			<app-pojistnik [(data)]="data.pojistnik" [layout]="layout" [submitted]="o.submitted" required></app-pojistnik>
+			<app-osoba [(data)]="data.pojistnik" [role]="'pojistnik'" [layout]="layout" [submitted]="o.submitted" required></app-osoba>
 			<h4 class="vagl text-primary">{{ 'OSOBA.POJISTENY.LABEL' | translate }}</h4>
 			<div class="row">
 				<div class="{{ layout.grid.column }}">
@@ -187,9 +188,9 @@
 					</div>
 				</div>
 			</div>			
-			<app-pojisteny *ngIf="data.pojistenypojistnik !== true" [(data)]="data.pojisteny" [layout]="layout" [submitted]="o.submitted" required></app-pojisteny>
+			<app-osoba *ngIf="data.pojistenypojistnik !== true" [(data)]="data.pojisteny" [role]="'pojisteny'" [layout]="layout" [submitted]="o.submitted" required></app-osoba>
     	<div class="form-group text-center">
-			<button type="submit" class="btn btn-success btn-lg mt-4" [ngx-scroll-to]="'app'" [ngx-scroll-to-duration]="200">
+			<button type="submit" class="btn btn-success btn-lg mt-4" (click)="Top.scrollIntoView({ behavior: 'smooth', block: 'start' })">
 				{{ 'FORM.BUTTONS.DALE' | translate }} <i class="fa fa-chevron-right"></i>
 			</button>
 		</div>

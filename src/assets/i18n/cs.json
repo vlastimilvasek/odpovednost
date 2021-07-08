@@ -223,23 +223,36 @@
 		"PSC": {
 	        "LABEL": "PSČ",
 	        "PLACEHOLDER": "15500",
-	        "HINT": ""
+	        "HINT": "Zadejte PSČ bez mezer."
 		},
         "OBEC": {
 	        "LABEL": "Obec",
 	        "PLACEHOLDER": "Praha",
-	        "HINT": ""
+	        "HINT": "Zadejte název obce v&nbsp;přesném znění, tak&nbsp;jak&nbsp;je uvedeno např.&nbsp;na&nbsp;osobních dokladech."
 		},
         "ULICE": {
 	        "LABEL": "Ulice",
 	        "PLACEHOLDER": "Podhorská",
-	        "HINT": ""
+	        "HINT": "Zadejte název ulice/obce v&nbsp;přesném znění, tak&nbsp;jak&nbsp;je uvedeno např.&nbsp;na&nbsp;osobních dokladech."
 		},		
         "CP": {
 	        "LABEL": "č.p./č.or.",
 	        "PLACEHOLDER": "92/11",
 	        "HINT": ""
-		}   
+		},
+        "OVERENO": {
+	        "LABEL": "Adresa",
+	        "ANO": "<i class=\"fa fa-check text-success\"></i>&nbsp;ověřena",
+			"NE": "<i class=\"fa fa-times text-danger\"></i>&nbsp;neověřena",
+			"OVERIT": "Ověřit",
+			"ZMENIT": "Změnit",
+	        "HINT": "Více pojišťoven již používá úřední systém RUIAN (každé místo v&nbsp;ČR má unikátní kód) pro&nbsp;ověření adresy. Proto věnujte zadání adresy pozornost, problematické bývají např.&nbsp;zkratky v&nbsp;názvech. Doporučujeme využít našeho 'našeptávače' - zadejte prvních pár znaků a&nbsp;chvíli vyčkejte pro&nbsp;výběr z&nbsp;nabídky možností. Doporučujeme začít zadáním PSČ."
+		},
+        "MODAL": {
+	        "TITLE": "Upřesnění adresy",
+	        "VYBER": "Vyberte z nalezených adres",
+	        "UPRESNIT": "<h5 class=\"text-primary\">Dohledání adresy</h5><p>Dobrým pomocníkem pro ověření správného zápisu Vaší adresy jsou mapy.cz, které si umí poradit se zkratkami a alternativními zápisy. Zkuste tam najít adresu a přepsat údaje do našeho formuláře.</p>"
+		}
     },
     "OSOBA": {
         "POJISTNIKPOJISTENY": {
@@ -280,7 +293,7 @@
         "JMENO": {
 	        "LABEL": "Jméno",
 	        "PLACEHOLDER": "Jan",
-	        "HINT": "Vyplňte jméno podle skutečnosti."
+	        "HINT": ""
 		},
         "PRIJMENI": {
 	        "LABEL": "Příjmení",
@@ -290,34 +303,34 @@
         "SPOLECNOST": {
 	        "LABEL": "Název společnosti",
 	        "PLACEHOLDER": "Srovnávač.cz, s.r.o.",
-	        "HINT": ""
+	        "HINT": "Vyplňte název společnosti v&nbsp;přesné podobě podle&nbsp;obchodního rejstříku."
 		},		
         "EMAIL": {
 	        "LABEL": "Email",
 	        "PLACEHOLDER": "info@srovnavac.cz",
-	        "HINT": ""
+	        "HINT": "Zadejte platnou emailovou adresu. Věnujte její kontrole zvýšenou pozornost, většina pojišťoven komunikuje hlavně pomocí emailu."
 		},
 		"RC": {
 	        "LABEL": "Rodné číslo",
 	        "PLACEHOLDER": "7708071234",
-	        "HINT": "Zadejte bez lomítka, pouze 9 nebo 10 číslic. Není-li RČ přiděleno, poslední 4 číslice zadejte 9999.",
+	        "HINT": "Zadejte bez&nbsp;lomítka, pouze 9 nebo&nbsp;10 číslic. Není-li RČ přiděleno, poslední 4 číslice zadejte 9999.",
 	        "REQUIRED": "Zadejte rodné číslo v platném formátu."	
 		},
 		"IC": {
 	        "LABEL": "IČ",
 	        "PLACEHOLDER": "27074358",
-	        "HINT": "Zadejte platné IČ - osm číslic. Můžete ho vyhledat např. v systému ARES.",
+	        "HINT": "Zadejte platné IČ - osm číslic. Můžete ho&nbsp;vyhledat např. v&nbsp;systému ARES.",
 	        "REQUIRED": "Zadejte platné IČ."	        
 		},
 		"PLATCE_DPH": {
 	        "LABEL": "plátce DPH",
 	        "PLACEHOLDER": "",
-	        "HINT": "Zaškrtněte v případě, že se jedná o plátce DPH."	        
+	        "HINT": "Zaškrtněte v&nbsp;případě, že&nbsp;se&nbsp;jedná o&nbsp;plátce&nbsp;DPH."	        
 		},				
         "TELEFON": {
 	        "LABEL": "Telefon",
 	        "PLACEHOLDER": "603 929 233",
-	        "HINT": "Zadejte jako 9 číslic. V případě nestandardního čísla (se zahraniční předvolbou), uveďte dále do poznámky."
+	        "HINT": "Zadejte jako 9 číslic. V&nbsp;případě nestandardního čísla (se&nbsp;zahraniční předvolbou), uveďte dále do&nbsp;poznámky."
 		},		
         "KADRESA": {
 	        "LABEL": "Odlišná korespondenční adresa?",

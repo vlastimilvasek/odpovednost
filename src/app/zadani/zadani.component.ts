@@ -82,6 +82,7 @@ export class ZadaniComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.lists.povolani = this.paramsService.getPovolani();
     }
+    
     ngOnChanges() {
         setTimeout(() => {
             this.profeseList();
